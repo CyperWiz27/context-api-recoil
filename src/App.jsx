@@ -5,24 +5,24 @@ import { countAtom, evenSelector } from "./store/atoms/count";
 
 function App() {
 
-  const [count,setCount]= useState(0);
+  // const [count,setCount]= useState(0);
 
   return (
     <div>
-      {/* <RecoilRoot>
+      <RecoilRoot>
         <Count />
-      </RecoilRoot> */}
-      <CountContext.Provider value={{
+      </RecoilRoot>
+      {/* <CountContext.Provider value={{
         count : count,
         setCount : setCount,
-        }}>
-         <Count />
-      </CountContext.Provider>
+        }}> */}
+         {/* <Count /> */}
+      {/* </CountContext.Provider> */}
     </div>
   )
 }
 
-const Count = memo(() => {
+function Count () {
   console.log("re-render");
 
   return (
@@ -31,32 +31,46 @@ const Count = memo(() => {
       <Buttons />
     </div>
   );
-});
+};
 
 function CountRenderer() {
-  // const count = useRecoilValue(countAtom);
-  const {count} = useContext(CountContext);
+  const count = useRecoilValue(countAtom);
+  // const {count} = useContext(CountContext);
   
   return <div>
     <b>
       {count}
-    </b>
-    {/* <EvenCountRenderer /> */}
+    </b><br>
+    </br>
+    <EvenCountRenderer />
+  </div>
+}
+
+//we use selector if it is completly derived from an atom 
+function EvenCountRenderer() {
+  const isEven = useRecoilValue(evenSelector);
+
+  return <div>
+    {isEven ? null: "It is even" }
   </div>
 }
 
 // function EvenCountRenderer() {
-//   const isEven = useRecoilValue(evenSelector);
+//   const  count = useRecoilValue(countAtom);
 
-//   return <div>
-//     {isEven ? "It is even" : null}
-//   </div>
+//   return (<>
+//       {(count%2==0)?"it is even " : null}
+//   </>)
 // }
+
 
 function Buttons() {
   // const setCount = useSetRecoilState(countAtom);
   // console.log("buttons re-rendererd");
-  const {setCount} = useContext(CountContext);
+  // const {setCount} = useContext(CountContext);
+
+  // const[count,setCount]= useRecoilState(countAtom);
+  const setCount= useSetRecoilState(countAtom);
 
   return <div>
     <button onClick={() => {
